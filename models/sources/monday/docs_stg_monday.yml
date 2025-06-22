@@ -1,0 +1,379 @@
+version: 2
+models:
+  - name: stg_boards_monday
+    description: The stg_boards_monday model is a tool that organizes data from the
+      Monday.com platform. It focuses on active boards, providing details like the
+      board's ID, name, description, and the number of items it contains. This model
+      can be used to track project progress, identify active workspaces, and understand
+      the workload distribution. It filters out deleted boards, ensuring only relevant,
+      current data is presented. This can help in making informed decisions about
+      resource allocation and project management.
+    meta:
+      source_system: Monday.com
+      source_sub_system: N/A
+      source_table: boards
+      source_classification: Operations
+      source_category: Operational
+      business_key: No Business Key
+      primary_key: No Primary Key
+    columns:
+      - name: board_id
+        description: The unique identifier for an individual board.
+        data_tests:
+          - not_null
+        data_type: NUMBER(38, 10)
+      - name: workspace_id
+        description: The unique identifier for the workspace that contains the board.
+          A workspace is a collection of boards and folders in the Monday.com project
+          management tool.
+        data_type: NUMBER(38, 10)
+      - name: board_folder_id
+        description: The unique identifier for the folder that contains the board.
+        data_type: NUMBER(38, 10)
+      - name: items_count
+        description: The total number of items (tasks, issues, etc.) associated with
+          the board.
+        data_type: NUMBER(38, 10)
+      - name: name
+        description: The display name given to the board by its creators.
+        data_type: TEXT(256)
+      - name: description
+        description: A textual description of the board and its purpose.
+        data_type: TEXT(512)
+      - name: state
+        description: Indicates whether the board is active or archived. Only active
+          boards are included in this model.
+        data_type: TEXT(256)
+
+  - name: stg_board_groups_monday
+    description: Items are grouped together in units called groups. Each board contains
+      one or multiple groups, and each group can hold one or many items.
+    meta:
+      source_system: Monday.com
+      source_sub_system: N/A
+      source_table: board_groups
+      source_classification: Operations
+      source_category: Operational
+      business_key: No Business Key
+      primary_key: No Primary Key
+    columns:
+      - name: board_id
+        description: The unique identifier of the associated board. 
+        data_tests:
+          - not_null
+        data_type: NUMBER(38, 10)
+      - name: group_id
+        description: he unique identifier of the associated board group the board item belongs to
+        data_tests:
+          - not_null
+        data_type: TEXT(256)
+      - name: title
+        description: The group's title.
+        data_type: TEXT(256)
+
+  - name: stg_board_items_monday
+    description: monday.com items are a core object in the platform. Items are the
+      objects that hold the actual data within the board, to better illustrate this,
+      you can think of a board as a table and an item as a single row in that table.
+    meta:
+      source_system: Monday.com
+      source_sub_system: N/A
+      source_table: board_items
+      source_classification: Operations
+      source_category: Operational
+      business_key: No Business Key
+      primary_key: No Primary Key
+    columns:
+      - name: board_id
+        description: The unique identifier of the associated board. 
+        data_tests:
+          - not_null
+        data_type: NUMBER(38, 10)
+      - name: item_id
+        description: The unique identifier of the item.
+        data_tests:
+          - not_null
+        data_type: NUMBER(38, 10)
+      - name: updated_at
+        description: The item's last update date.
+      - name: group_id
+        description: he unique identifier of the associated board group the board item belongs to
+        data_type: TEXT(256)
+      - name: parent_item_id
+        description: The unique identifier of the associated board item's parent item (if any).
+        data_type: NUMBER(38, 10)
+      - name: name
+        description: The name of the associated board item.
+        data_type: TEXT(256)
+      - name: creator_id
+        description: The unique identifier of the item's creator. Will be null if
+          the item was created by default on the board.
+        data_type: NUMBER(38, 10)
+      - name: created_at
+        description: The item's create date.
+      - name: state
+        description: The item's state (all / active / archived / deleted).
+        data_type: TEXT(256)
+      - name: email
+        description: The item's email address.
+        data_type: TEXT(256)
+
+  - name: stg_board_item_column_values_monday
+    meta:
+      source_system: Monday.com
+      source_sub_system: N/A
+      source_table: board_item_column_values
+      source_classification: Operations
+      source_category: Operational
+      business_key: No Business Key
+      primary_key: No Primary Key
+    description: Every monday.com board has one or more columns, each of which holds
+      a particular type of information. These column values are essentially the content
+      of the board.
+    columns:
+      - name: column_id
+        description: The column's unique identifier.
+        data_tests:
+          - not_null
+        data_type: TEXT(256)
+      - name: item_id
+        description: The unique identifier of the item.
+        data_tests:
+          - not_null
+        data_type: NUMBER(38, 10)
+      - name: additional_info
+        description: The column value's additional information.
+        data_type: TEXT(256)
+      - name: text
+        description: The column's textual value in string form.
+        data_type: TEXT(4096)
+      - name: value
+        description: The column's value in json format.
+        data_type: TEXT(4096)
+
+  - name: stg_workspaces_monday
+    meta:
+      source_system: Monday.com
+      source_sub_system: N/A
+      source_table: workspaces
+      source_classification: Operations
+      source_category: Operational
+      business_key: No Business Key
+      primary_key: No Primary Key
+    description: 'The stg_workspaces_monday model is a tool that organizes data from
+      the Monday platform. It focuses on three main elements: the type of workspace
+      (kind), its name, and a unique identifier (workspace_id). This model filters
+      out any deleted data, ensuring only active and relevant information is considered.
+      It can be used to understand the variety and distribution of workspaces in use.
+      This can help in identifying popular workspace types, tracking workspace usage
+      trends, and making informed decisions about resource allocation.'
+    columns:
+      - name: workspace_id
+        description: A unique number that identifies each workspace. Like a social
+          security number for workspaces.
+        data_tests:
+          - not_null
+        data_type: NUMBER(38, 10)
+      - name: workspace_kind
+        description: The type of workspace, open or closed.
+        data_type: TEXT(256)
+      - name: workspace_name
+        description: The human-readable name of the workspace, such as 'Marketing
+          Campaigns' or 'Product Roadmap'.
+        data_type: TEXT(256)
+
+  - name: stg_board_columns_monday
+    meta:
+      source_system: Monday.com
+      source_sub_system: N/A
+      source_table: board_columns
+      source_classification: Operations
+      source_category: Operational
+      business_key: No Business Key
+      primary_key: No Primary Key
+    description: Columns are one of two core elements of any board in monday.com.
+      A board is formatted as a table, where there are columns and rows, called items
+    columns:
+      - name: board_id
+        description: The unique identifier of the associated board. 
+        data_tests:
+          - not_null
+        data_type: NUMBER(38, 10)
+      - name: column_id
+        description: The column's identifier, unique only to its board.
+        data_tests:
+          - not_null
+        data_type: TEXT(256)
+      - name: archived
+        description: Whether the column is archived or not.
+        data_type: BOOLEAN
+      - name: description
+        description: The column's description.
+        data_type: TEXT(256)
+      - name: title
+        description: The column's title.
+        data_type: TEXT(256)
+      - name: type
+        description: The column's type.
+        data_type: TEXT(256)
+
+  - name: stg_activity_logs_monday
+    meta:
+      source_system: Monday.com
+      source_sub_system: N/A
+      source_table: activity_logs
+      source_classification: Operations
+      source_category: Operational
+      business_key: No Business Key
+      primary_key: No Primary Key
+    description: The stg_activity_logs_monday model is a tool that organizes and simplifies
+      complex activity data from a company's operations. It's like a detailed diary
+      of company activities, recording who did what, when, and where. It can be used
+      to track patterns, such as which tasks are most common or which users are most
+      active. This can help in making informed decisions, like where to allocate resources
+      or how to improve efficiency. The model also allows for the extraction of specific
+      details, such as the name of an item related to an event.
+    columns:
+      - name: ID
+        description: A unique identifier for each activity log.
+        type: NUMBER(38, 0)
+        data_type: NUMBER(38, 0)
+      - name: KIND
+        description: Deprecated - this column is no longer used and will be blank.
+        type: TEXT
+        data_type: TEXT
+      - name: NAME
+        description: The name of the user who performed the logged activity.
+        type: TEXT
+        data_type: TEXT
+      - name: DESCRIPTION
+        description: Any additional details about the logged activity. This column
+          may be blank for some logs.
+        type: TEXT
+        data_type: TEXT
+      - name: ACCOUNT_ID
+        description: A unique code that identifies which Monday.com account the activity
+          log belongs to.
+      - name: CREATED_AT
+        description: The date and time when the activity log was created, in text
+          format.
+      - name: USER_ID
+        description: The ID of the user who performed the logged activity.
+      - name: BOARD_ID
+        description: The ID number of the specific board within the Monday.com account
+          where the logged activity took place.
+      - name: EVENT
+        description: The specific action that was logged (e.g. created, updated, deleted).
+      - name: ENTITY
+        description: The type of item within Monday.com that the logged activity relates
+          to (e.g. pulse, column, board, etc.).
+      - name: EVENT_DATA
+        description: Additional data about the logged event in JSON format. This provides
+          more details about the activity.
+      - name: ITEM_ID
+        description: The ID number of the specific pulse (item) within the Monday.com
+          board that the logged activity relates to.
+      - name: ITEM_NAME
+        description: The name of the specific pulse (item) within the Monday.com board
+          that the logged activity relates to.
+  - name: stg_teams_monday
+    description: The stg_teams_monday model is a simplified and organized representation
+      of team data. It's like a digital filing cabinet that stores key information
+      about different teams, such as their unique IDs and names. This model is created
+      using a process that ensures each team has a unique identifier, making it easier
+      to track and analyze each team's data. This can be used in various ways, such
+      as understanding team performance, tracking changes over time, or identifying
+      patterns and trends among teams.
+    meta:
+      source_system: Monday.com
+      source_sub_system: N/A
+      source_table: teams
+      source_classification: Operations
+      source_category: Operational
+      business_key: No Business Key
+      primary_key: No Primary Key
+    columns:
+      - name: ID
+        description: A unique identifier for each team record in the raw data source.
+          This ID is used to track teams over time as information changes.
+        type: NUMBER(38, 0)
+        data_type: NUMBER(38, 0)
+      - name: TEAM_ID
+        description: An integer value that uniquely identifies each team. This value
+          is generated to create a simple reference for teams in the data warehouse.
+        type: TEXT
+        data_type: TEXT
+      - name: TEAM_NAME
+        description: The full name of the team. For example, 'Marketing' or 'Engineering'.
+        type: TEXT
+        data_type: TEXT
+      - name: TEAM_PK
+        description: A hashed value created from the team ID to serve as a pseudonym
+          or 'fake key' for the team. This allows the team to be analyzed without
+          exposing its true ID.
+        type: TEXT
+        data_type: TEXT
+
+      - name: stg_board_items_active_monday
+        description: No description
+        access: private
+        group: data_team
+        config:
+          contract:
+          enforced: false
+          alias_types: true
+        constraints:
+        - type: primary_key
+          columns:
+          - id
+          warn_unenforced: true
+          warn_unsupported: true
+        meta:
+          source_system: Monday.com
+          source_table: '{table_name}'
+          classification: operations
+          category: operational
+        columns:
+        - name: omnata_retrieve_date
+          description: '{{ doc("omnata_retrieve_date") }}'
+          data_type: TIMESTAMP_LTZ
+          type: TIMESTAMP_LTZ
+          meta:
+            pii_type: none
+            confidential_type: none
+            encryption_type: none
+            primary_key: false
+            business_key: false
+        - name: board_id
+          description: TBC
+          data_type: NUMBER(38, 0)
+          type: NUMBER
+          meta:
+            pii_type: none
+            confidential_type: none
+            encryption_type: none
+            primary_key: false
+            business_key: false
+        - name: id
+          description: TBC
+          data_type: NUMBER(38, 0)
+          type: NUMBER
+          constraints:
+          - type: primary_key
+          meta:
+            pii_type: none
+            confidential_type: none
+            encryption_type: none
+            primary_key: true
+            business_key: null
+        - name: updated_at
+          description: TBC
+          data_type: TIMESTAMP_NTZ
+          type: TIMESTAMP_NTZ
+          meta:
+            pii_type: none
+            confidential_type: none
+            encryption_type: none
+            primary_key: false
+            business_key: false
+  

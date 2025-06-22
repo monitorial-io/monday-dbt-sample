@@ -1,0 +1,85 @@
+version: 2
+models:
+  - name: int_board_items_flatterned
+    description: The dbt model int_board_items_flatterned is a tool that organizes
+      and categorizes data related to various items on a board. It provides a detailed
+      overview of each item, including its name, ID, parent item ID, and whether it's
+      part of a project, program, or system. The model also identifies if an item
+      is archived, a company item, or a sub-board item. This information can be used
+      to track and manage items more efficiently, making it a valuable resource for
+      project management and strategic planning.
+    columns:
+      - name: board_id
+        description: The unique ID of the board.
+      - name: board_folder_id
+        description: The unique ID of the folder that contains the board.
+      - name: parent_item_id
+        description: The unique identifier of an item's parent item. If an item is
+          a subtask or subitem of another item, this column will contain the ID of
+          the parent item. If an item has no parent, this value will be null.
+      - name: group_id
+        description: The unique identifier for an item group on a board. An item group
+          is a way to categorize multiple related items together.
+      - name: item_id
+        description: The unique numeric identifier for an individual item on a board.
+      - name: item_name
+        description: The name or title given to an individual item on a board.
+      - name: item_state
+        description: The state of the board item, such as 'active' or 'archived'.
+  - name: int_board_item_column_values
+    description: The dbt model int_board_item_column_values is a tool that organizes
+      and simplifies complex data from various sources. It's like a librarian who
+      categorizes books based on their title, type, and additional information. This
+      model helps to understand the relationship between different data points, such
+      as board items and their corresponding column values. It can be used to analyze
+      patterns and correlations in the data, which can help in making informed decisions.
+      For example, it can identify which board items are most commonly associated
+      with certain column values.
+    columns:
+      - name: board_id
+        description: The unique identifier for the board that contains this item.
+      - name: item_id
+        description: The unique identifier for the board item that this column value
+          belongs to.
+      - name: column_id
+        description: The unique identifier for the column that contains this value.
+      - name: column_type
+        description: The data type of this column, such as text, number, date, etc.
+      - name: column_value
+        description: The actual value stored in this column for the given board item.
+      - name: column_settings
+        description: The configuration settings for this column, stored as JSON.
+      - name: column_title
+        description: The display name given to this column.
+
+  - name: int_board_items
+    description: The dbt model int_board_items is a tool that organizes and tracks
+      items on a board. It's like a digital bulletin board where each item has a unique
+      identifier, a name, and a status. It also keeps track of the group each item
+      belongs to and if it's linked to another item. This model is useful for managing
+      tasks or projects, as it can show what's currently active, what's been completed,
+      and how items are related. It can also track changes over time, such as when
+      items are added or removed.
+    meta:
+      classification: Operations
+      business_key: board_id, item_id
+      primary_key: item_id
+    columns:
+      - name: board_id
+        description: The unique identifier for a board in the Monday.com project management
+          tool. A board represents a workspace where items like tasks, events, and
+          updates can be organized and tracked.
+      - name: item_id
+        description: The unique numeric identifier for an individual item on a board.
+      - name: group_id
+        description: The unique identifier for an item group on a board. An item group
+          is a way to categorize multiple related items together.
+      - name: parent_item_id
+        description: The unique identifier of an item's parent item. If an item is
+          a subtask or subitem of another item, this column will contain the ID of
+          the parent item. If an item has no parent, this value will be null.
+      - name: item_name
+        description: The name or title given to an individual item on a board.
+      - name: item_state
+        description: The current state or status of an individual item on a board.
+          For example, 'In Progress', 'Complete', or 'Blocked'.

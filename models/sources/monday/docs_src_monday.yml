@@ -1,0 +1,630 @@
+version: 2
+sources:
+  - name: monday
+    schema: monday
+    description: Contains all the raw tables for the 'Monday.com' source system
+    loader: Omnata Monday.com Plugin
+    database: {{ var('monday_database') }}
+    quoting:
+      database: false
+      schema: false
+      identifier: false
+    tables:
+      - name: boards
+        description: monday.com boards are where users input all of their data. A board's structure is composed of rows (called items), groups of rows (called groups), and columns. The data of the board is stored in the items on the board as well as in the updates sections of each item. Each board has one or more owners and subscribers.
+        columns:
+          - name: ID
+            description: The unique identifier of the board.
+            type: TEXT
+            data_type: TEXT
+
+          - name: PERMISSIONS
+            description: The permissions on the board (everyone, collaborators, assignee, or owners).
+            type: TEXT
+            data_type: TEXT
+          - name: ITEMS_COUNT
+            description: The number of items on the board.
+            type: TEXT
+            data_type: TEXT
+          - name: OWNER_ID
+            description: The Identifier of the board owner
+            type: NUMBER(38, 0)
+            data_type: NUMBER(38, 0)
+          - name: BOARD_FOLDER_ID
+            description: The unique identifier for the folder that contains the board(s).
+            type: TEXT
+            data_type: TEXT
+          - name: NAME
+            description: The name of the board.
+            type: TEXT
+            data_type: TEXT
+          - name: UPDATED_AT
+            description: The last time the board was updated.
+            type: TIMESTAMP_TZ
+            data_type: TIMESTAMP_TZ
+          - name: TOP_GROUP_ID
+            description: The unique identifier for the group at the top of the board.
+            type: TEXT
+            data_type: TEXT
+          - name: TYPE
+            description: The type of the board (board, sub items board, or document).
+            type: TEXT
+            data_type: TEXT
+          - name: STATE
+            description: The state of the board (active, archived, or deleted)
+            type: TEXT
+            data_type: TEXT
+          - name: BOARD_KIND
+            description: The board's kind (public, private, or share)
+            type: TEXT
+            data_type: TEXT
+          - name: DESCRIPTION
+            description: The board's description.
+            type: TEXT
+            data_type: TEXT
+          - name: WORKSPACE_ID
+            description: The unique identifier of the workspace that contains the board (null for Main workspace).
+            type: TEXT
+            data_type: TEXT
+          - name: WORKSPACE_NAME
+            description: The workspace name that contains the board (null for Main workspace).
+            type: TEXT
+            data_type: TEXT
+          - name: WORKSPACE_KIND
+            description: The workspace kind that contains the board (null for Main workspace).
+            type: TEXT
+            data_type: TEXT
+          - name: WORKSPACE_DESCRIPTION
+            description: The workspace description that contains the board (null for Main workspace).
+            type: TEXT
+            data_type: TEXT
+          - name: omnata_retrieve_date
+            description: '{{ doc("omnata_retrieve_date") }}'
+            type: TIMESTAMP_LTZ
+            data_type: TIMESTAMP_LTZ
+          - name: omnata_app_identifier
+            description: '{{ doc("omnata_app_identifier") }}'
+            type: VARCHAR
+            data_type: VARCHAR
+          - name: omnata_raw_record
+            description: '{{ doc("omnata_raw_record") }}'
+            type: OBJECT
+            data_type: OBJECT
+        meta:
+          source_system: Monday.com
+          source_classification: Operations
+          source_category: Operational
+      - name: board_columns
+        description: Columns are one of two core elements of any board in monday.com. A board is formatted as a table, where there are columns and rows, called items
+        columns:
+          - name: BOARD_ID
+            description: The unique identifier of the associated board. 
+            type: TEXT
+            data_type: TEXT
+
+          - name: ID
+            description: The column's identifier, unique only to its board.
+            type: TEXT
+            data_type: TEXT
+
+          - name: ARCHIVED
+            description: Whether the column is archived or not.
+            type: BOOLEAN
+            data_type: BOOLEAN
+          - name: SETTINGS_STR
+            description: The column's settings in a string form.
+            type: TEXT
+            data_type: TEXT
+          - name: TITLE
+            description: The column's title.
+            type: TEXT
+            data_type: TEXT
+          - name: DESCRIPTION
+            description: The column's description.
+            type: TEXT
+            data_type: TEXT
+          - name: TYPE
+            description: The column's type.
+            type: TEXT
+            data_type: TEXT
+          - name: WIDTH
+            description: The column's width.
+            type: NUMBER(38, 0)
+            data_type: NUMBER(38, 0)
+          - name: omnata_retrieve_date
+            description: '{{ doc("omnata_retrieve_date") }}'
+            type: TIMESTAMP_LTZ
+            data_type: TIMESTAMP_LTZ
+          - name: omnata_app_identifier
+            description: '{{ doc("omnata_app_identifier") }}'
+            type: VARCHAR
+            data_type: VARCHAR
+          - name: omnata_raw_record
+            description: '{{ doc("omnata_raw_record") }}'
+            type: OBJECT
+            data_type: OBJECT
+        meta:
+          source_system: Monday.com
+          source_classification: Operations
+          source_category: Operational
+      - name: board_item_column_values
+        description: Every monday.com board has one or more columns, each of which holds a particular type of information. These column values are essentially the content of the board.
+        columns:
+          - name: ITEM_ID
+            description: The unique identifier of the item.
+            type: TEXT
+            data_type: TEXT
+          - name: ID
+            description: The column's unique identifier.
+            type: TEXT
+            data_type: TEXT
+          - name: TEXT
+            description: The column's textual value in string form.
+            type: TEXT
+            data_type: TEXT
+          - name: TYPE
+            description: The column's type.
+            type: TEXT
+            data_type: TEXT
+          - name: VALUE
+            description: The column's value in JSON format.
+            type: TEXT
+            data_type: TEXT
+          - name: omnata_retrieve_date
+            description: '{{ doc("omnata_retrieve_date") }}'
+            type: TIMESTAMP_LTZ
+            data_type: TIMESTAMP_LTZ
+          - name: omnata_app_identifier
+            description: '{{ doc("omnata_app_identifier") }}'
+            type: VARCHAR
+            data_type: VARCHAR
+          - name: omnata_raw_record
+            description: '{{ doc("omnata_raw_record") }}'
+            type: OBJECT
+            data_type: OBJECT
+        meta:
+          source_system: Monday.com
+          source_classification: Operations
+          source_category: Operational
+      - name: board_groups
+        description: Items are grouped together in units called groups. Each board contains one or multiple groups, and each group can hold one or many items.
+        columns:
+          - name: BOARD_ID
+            description: The unique identifier of the associated board. 
+            type: TEXT
+            data_type: TEXT
+
+          - name: ID
+            description: The group's unique identifier.
+            type: TEXT
+            data_type: TEXT
+
+          - name: ARCHIVED
+            description: Whether the group is archived or not.
+            type: TEXT
+            data_type: TEXT
+          - name: COLOR
+            description: The group's color.
+            type: TEXT
+            data_type: TEXT
+          - name: DELETED
+            description: Whether the group is deleted or not.
+            type: BOOLEAN
+            data_type: BOOLEAN
+          - name: POSITION
+            description: The group's position on the board.
+            type: TEXT
+            data_type: TEXT
+          - name: TITLE
+            description: The group's title.
+            type: TEXT
+            data_type: TEXT
+          - name: omnata_retrieve_date
+            description: '{{ doc("omnata_retrieve_date") }}'
+            type: TIMESTAMP_LTZ
+            data_type: TIMESTAMP_LTZ
+          - name: omnata_app_identifier
+            description: '{{ doc("omnata_app_identifier") }}'
+            type: VARCHAR
+            data_type: VARCHAR
+          - name: omnata_raw_record
+            description: '{{ doc("omnata_raw_record") }}'
+            type: OBJECT
+            data_type: OBJECT
+        meta:
+          source_system: Monday.com
+          source_classification: Operations
+          source_category: Operational
+      - name: board_items
+        description: monday.com items are a core object in the platform. Items are the objects that hold the actual data within the board, to better illustrate this, you can think of a board as a table and an item as a single row in that table.
+        columns:
+          - name: BOARD_ID
+            description: The unique identifier of the associated board. 
+            type: TEXT
+            data_type: TEXT
+
+          - name: ID
+            description: The item's unique identifier.
+            type: TEXT
+            data_type: TEXT
+
+          - name: PARENT_ITEM_ID
+            description: The unique identifier of the associated board item's parent item (if any).
+            type: TEXT
+            data_type: TEXT
+          - name: GROUP_ID
+            description: he unique identifier of the associated board group the board item belongs to
+            type: TEXT
+            data_type: TEXT
+          - name: EMAIL
+            description: The item's email address.
+            type: TEXT
+            data_type: TEXT
+          - name: NAME
+            description: The item's name.
+            type: TEXT
+            data_type: TEXT
+          - name: UPDATED_AT
+            description: The item's last update date.
+            type: TIMESTAMP_TZ
+            data_type: TIMESTAMP_TZ
+          - name: STATE
+            description: The item's state (all / active / archived / deleted).
+            type: TEXT
+            data_type: TEXT
+          - name: CREATED_AT
+            description: The item's create date.
+            type: TIMESTAMP_TZ
+            data_type: TIMESTAMP_TZ
+          - name: CREATOR_ID
+            description: The unique identifier of the item creator. Will be null if the item was created by default on the board.
+            type: TEXT
+            data_type: TEXT
+          - name: omnata_retrieve_date
+            description: '{{ doc("omnata_retrieve_date") }}'
+            type: TIMESTAMP_LTZ
+            data_type: TIMESTAMP_LTZ
+          - name: omnata_app_identifier
+            description: '{{ doc("omnata_app_identifier") }}'
+            type: VARCHAR
+            data_type: VARCHAR
+          - name: omnata_raw_record
+            description: '{{ doc("omnata_raw_record") }}'
+            type: OBJECT
+            data_type: OBJECT
+        meta:
+          source_system: Monday.com
+          source_classification: Operations
+          source_category: Operational
+      - name: users
+        description: Every user in monday.com is a part of an account (i.e an organization) and could be a member or a guest in that account.
+        columns:
+          - name: ID
+            description: The user's unique identifier.
+            type: NUMBER(38, 0)
+            data_type: NUMBER(38, 0)
+
+          - name: PHOTO_TINY
+            description: Will return the URL of the user's uploaded photo in tiny size (30x30).
+            type: TEXT
+            data_type: TEXT
+          - name: IS_GUEST
+            description: Will return true if the user is a guest.
+            type: BOOLEAN
+            data_type: BOOLEAN
+          - name: JOIN_DATE
+            description: The date the user joined the account and returned as YYYY-MM-DD.
+            type: TIMESTAMP_TZ
+            data_type: TIMESTAMP_TZ
+          - name: URL
+            description: The user's profile URL.
+            type: TEXT
+            data_type: TEXT
+          - name: PHOTO_SMALL
+            description: Will return the URL of the user's uploaded photo in a small size (150x150 px).
+            type: TEXT
+            data_type: TEXT
+          - name: PHOTO_THUMB
+            description: Will return the URL of the user's uploaded photo in thumbnail size (100x100 px).
+            type: TEXT
+            data_type: TEXT
+          - name: IS_ADMIN
+            description: Will return true if the user is an Admin;
+            type: BOOLEAN
+            data_type: BOOLEAN
+          - name: BIRTHDAY
+            description: The user's date of birth, as set in their profile and returned as YYYY-MM-DD.
+            type: TEXT
+            data_type: TEXT
+          - name: IS_VERIFIED
+            description: Will return "true" if the user confirmed their profile via the confirmation email.
+            type: BOOLEAN
+            data_type: BOOLEAN
+          - name: ENABLED
+            description: Will return true if the user is enabled.
+            type: BOOLEAN
+            data_type: BOOLEAN
+          - name: EMAIL
+            description: The user's email.
+            type: TEXT
+            data_type: TEXT
+          - name: UTC_HOURS_DIFF
+            description: The user’s UTC hours difference.
+            type: NUMBER(38, 0)
+            data_type: NUMBER(38, 0)
+          - name: COUNTRY_CODE
+            description: The user's country code.
+            type: TEXT
+            data_type: TEXT
+          - name: NAME
+            description: The user's name.
+            type: TEXT
+            data_type: TEXT
+          - name: IS_VIEW_ONLY
+            description: Will return true if the user is a Viewer.
+            type: BOOLEAN
+            data_type: BOOLEAN
+          - name: PHOTO_THUMB_SMALL
+            description: Will return the URL of the user's uploaded photo in a small size (150x150 px).
+            type: TEXT
+            data_type: TEXT
+          - name: LOCATION
+            description: The user's location.
+            type: TEXT
+            data_type: TEXT
+          - name: CURRENT_LANGUAGE
+            description: The user's language.
+            type: TEXT
+            data_type: TEXT
+          - name: TITLE
+            description: The user's title.
+            type: TEXT
+            data_type: TEXT
+          - name: PHONE
+            description: The user's phone number.
+            type: TEXT
+            data_type: TEXT
+          - name: MOBILE_PHONE
+            description: The user's mobile phone number.
+            type: TEXT
+            data_type: TEXT
+          - name: TIME_ZONE_IDENTIFIER
+            description: The user's timezone identifier.
+            type: TEXT
+            data_type: TEXT
+          - name: PHOTO_ORIGINAL
+            description: Will return the URL of the user's uploaded photo in its original size.
+            type: TEXT
+            data_type: TEXT
+          - name: CREATED_AT
+            description: When the user profile was created, returned as YYYY-MM-DD.
+            type: TIMESTAMP_TZ
+            data_type: TIMESTAMP_TZ
+          - name: IS_PENDING
+            description: Will return true if the user didn't confirm their email yet.
+            type: BOOLEAN
+            data_type: BOOLEAN
+          - name: ACCOUNT_ID
+            description: The user's account Identifier
+            type: NUMBER(38, 0)
+            data_type: NUMBER(38, 0)
+          - name: ENCRYPT_API_TOKEN
+            description: This is the user's access token. It can be used for building the board's email address.
+            type: TEXT
+            data_type: TEXT
+          - name: omnata_retrieve_date
+            description: '{{ doc("omnata_retrieve_date") }}'
+            type: TIMESTAMP_LTZ
+            data_type: TIMESTAMP_LTZ
+          - name: omnata_app_identifier
+            description: '{{ doc("omnata_app_identifier") }}'
+            type: VARCHAR
+            data_type: VARCHAR
+          - name: omnata_raw_record
+            description: '{{ doc("omnata_raw_record") }}'
+            type: OBJECT
+            data_type: OBJECT
+        meta:
+          source_system: Monday.com
+          source_classification: Operations
+          source_category: Operational
+
+      - name: workspaces
+        description: monday.com Workspaces are used by teams to organize and manage their accounts by departments/teams/projects. Workspaces can contain boards, dashboards, and folders.
+        columns:
+          - name: ID
+            description: The workspace identifier.
+            type: NUMBER(38, 0)
+            data_type: NUMBER(38, 0)
+
+          - name: CREATED_AT
+            description: The workspace's creation date.
+            type: TIMESTAMP_TZ
+            data_type: TIMESTAMP_TZ
+          - name: NAME
+            description: The workspace name.
+            type: TEXT
+            data_type: TEXT
+          - name: KIND
+            description: Will return Open for Open Workspaces, and Closed for Closed Workspaces.
+            type: TEXT
+            data_type: TEXT
+          - name: DESCRIPTION
+            description: The workspace's description.
+            type: TEXT
+            data_type: TEXT
+          - name: STATE
+            description: The state of the workspace (active, archived, or deleted)
+            type: TEXT
+            data_type: TEXT
+          - name: omnata_retrieve_date
+            description: '{{ doc("omnata_retrieve_date") }}'
+            type: TIMESTAMP_LTZ
+            data_type: TIMESTAMP_LTZ
+          - name: omnata_app_identifier
+            description: '{{ doc("omnata_app_identifier") }}'
+            type: VARCHAR
+            data_type: VARCHAR
+          - name: omnata_raw_record
+            description: '{{ doc("omnata_raw_record") }}'
+            type: OBJECT
+            data_type: OBJECT
+        meta:
+          source_system: Monday.com
+          source_classification: Operations
+          source_category: Operational
+      - name: activity_logs
+        description: contains all activities performed on a board
+        columns:
+          - name: ID
+            description: The ID of the activity log event.
+            type: TEXT
+            data_type: TEXT
+          - name: ACCOUNT_ID
+            description: The account ID that initiated the event.
+            type: TEXT
+            data_type: TEXT
+          - name: CREATED_AT
+            description: The time of the event in 17 digit unix time.
+            type: TEXT
+            data_type: TEXT
+          - name: DATA
+            description: The item's column values in string form.
+            type: TEXT
+            data_type: TEXT
+          - name: ENTITY
+            description: The entity of the event that was changed (pulse / board).
+            type: TEXT
+            data_type: TEXT
+          - name: EVENT
+            description: The action that took place.
+            type: TEXT
+            data_type: TEXT
+          - name: USER_ID
+            description: The user ID of the user who initiated the event.
+            type: TEXT
+            data_type: TEXT
+          - name: BOARD_ID
+            description: The unique identifier of the associated board. 
+            type: TEXT
+            data_type: TEXT
+          - name: omnata_retrieve_date
+            description: '{{ doc("omnata_retrieve_date") }}'
+            type: TIMESTAMP_LTZ
+            data_type: TIMESTAMP_LTZ
+          - name: omnata_app_identifier
+            description: '{{ doc("omnata_app_identifier") }}'
+            type: VARCHAR
+            data_type: VARCHAR
+          - name: omnata_raw_record
+            description: '{{ doc("omnata_raw_record") }}'
+            type: OBJECT
+            data_type: OBJECT
+        meta:
+          source_system: Monday.com
+          source_classification: Operations
+          source_category: Operational
+
+      - name: teams
+        description: defined teams within monday.com
+        columns:
+          - name: ID
+            description: TBC
+            type: NUMBER(38, 0)
+            data_type: NUMBER(38, 0)
+          - name: NAME
+            description: TBC
+            type: TEXT
+            data_type: TEXT
+          - name: PICTURE_URL
+            description: TBC
+            type: TEXT
+            data_type: TEXT
+          - name: omnata_retrieve_date
+            description: '{{ doc("omnata_retrieve_date") }}'
+            type: TIMESTAMP_LTZ
+            data_type: TIMESTAMP_LTZ
+          - name: omnata_app_identifier
+            description: '{{ doc("omnata_app_identifier") }}'
+            type: VARCHAR
+            data_type: VARCHAR
+          - name: omnata_raw_record
+            description: '{{ doc("omnata_raw_record") }}'
+            type: OBJECT
+            data_type: OBJECT
+        meta:
+          source_system: Monday.com
+          source_classification: HR
+          source_category: Reference
+
+      - name: folders
+        description: defined folders within monday.com
+        columns:
+          - name: ID
+            description: The folder's unique identifier
+            type: NUMBER(38, 0)
+            data_type: NUMBER(38, 0)
+          - name: NAME
+            description: The folder's name.
+            type: TEXT
+            data_type: TEXT
+          - name: OWNER_ID
+            description: The unique identifier of the folder's owner
+            type: NUMBER
+            data_type: NUMBER
+          - name: PARENT_ID
+            description: The unique identifier of the parent folder
+            type: NUMBER
+            data_type: NUMBER
+          - name: WORKSPACE_ID
+            description: The unique identifier of the assoicated workspace
+            type: NUMBER
+            data_type: NUMBER
+          - name: CREATED_AT
+            description: The folder's creation date.
+            type: TIMESTAMP_NTZ
+            data_type: TIMESTAMP_NTZ
+          - name: COLOR
+            description: The folder's color.
+            type: TEXT
+            data_type: TEXT
+          - name: omnata_retrieve_date
+            description: '{{ doc("omnata_retrieve_date") }}'
+            type: TIMESTAMP_LTZ
+            data_type: TIMESTAMP_LTZ
+          - name: omnata_app_identifier
+            description: '{{ doc("omnata_app_identifier") }}'
+            type: VARCHAR
+            data_type: VARCHAR
+          - name: omnata_raw_record
+            description: '{{ doc("omnata_raw_record") }}'
+            type: OBJECT
+            data_type: OBJECT
+        meta:
+          source_system: Monday.com
+          source_classification: HR
+          source_category: Reference
+
+      - name: board_items_active
+        description: current active board items
+        columns:
+          - name: board_id
+            description: The board id associated to the item
+            type: NUMBER(38, 0)
+            data_type: NUMBER(38, 0)
+          - name: id
+            description: The board item id
+            type: NUMBER(38, 0)
+            data_type: NUMBER(38, 0)
+          - name: omnata_app_identifier
+            description: '{{ doc("omnata_app_identifier") }}'
+            data_type: TEXT(255)
+            type: TEXT
+          - name: omnata_raw_record
+            description: '{{ doc("omnata_raw_record") }}'
+            data_type: VARIANT
+            type: VARIANT
+          - name: omnata_retrieve_date
+            description: '{{ doc("omnata_retrieve_date") }}'
+            data_type: TIMESTAMP_NTZ
+            type: TIMESTAMP_NTZ
